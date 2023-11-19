@@ -504,67 +504,149 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                 }
 
                 Button(onClick = {
-                    // Check rule
-                    if (indexPlayer == null) namePlayerError = true
-                    if (minuteScore > maxMinutes) minuteScoreError = true
-                    var countTeam1 = 0
-                    var countTeam2 = 0
-                    listPlayerScore.forEach{ pair ->
-                        if (pair.first.idTeam == team1!!.idTeam) countTeam1++ else countTeam2++
-                    }
-                    if (indexTeam == 0) countTeam1++ else countTeam2++
-                    if (countTeam1 != scoreTeam1 || countTeam2 != scoreTeam2) {
-                        numberPlayerScoreError = true
-                        Toast.makeText(context,"Số lượng bàn thắng và số lượng cầu thủ ghi bàn mỗi đội không phù hợp", Toast.LENGTH_SHORT).show()
-                    } else numberPlayerScoreError = false
+                    // Case 0 - 0
+                    if (scoreTeam1 == 0 && scoreTeam2 == 0){
+                        if (listPlayerScore.size>0){
+                            numberPlayerScoreError = true
+                            Toast.makeText(
+                                context,
+                                "Số lượng bàn thắng và số lượng cầu thủ ghi bàn mỗi đội không phù hợp",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else numberPlayerScoreError = false
+                        if (!numberPlayerScoreError){
+                            addResultMatchViewModel.updateTeam(
+                                team1!!.copy(
+                                    tie = team1!!.tie + 1,
+                                    totalGoal = team1!!.totalGoal + scoreTeam1
+                                )
+                            )
+                            addResultMatchViewModel.updateTeam(
+                                team2!!.copy(
+                                    tie = team2!!.tie + 1,
+                                    totalGoal = team2!!.totalGoal + scoreTeam2
+                                )
+                            )
+                            addResultMatchViewModel.updateMatch(
+                                match!!.copy(
+                                    resultTeam1 = scoreTeam1,
+                                    resultTeam2 = scoreTeam2,
+                                    status = Constant.STATUS_DONE
+                                )
+                            )
 
-                    // Thỏa mãn rule
-                    if (!namePlayerError && !numberPlayerScoreError && !minuteScoreError) {
-                        listPlayerScore.forEach { pair ->
-                            addResultMatchViewModel.addScore(pair.second)
+                            Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show()
+                            navController.navigate(MainScreen.HomeScreen.route)
                         }
-                        val player =
-                            if (indexTeam == 0) listPlayersTeam1[indexPlayer!!] else listPlayersTeam2[indexPlayer!!]
-                        addResultMatchViewModel.addScore(Score(idMatch = match!!.idMatch, idPlayer = player.idPlayer, time = minuteScore,
-                            typeScore = typeScore))
-                        val list = mutableListOf<Player>()
+                    } else {
+                        // Check rule
+                        if (indexPlayer == null) namePlayerError = true
+                        if (minuteScore > maxMinutes) minuteScoreError = true
+                        var countTeam1 = 0
+                        var countTeam2 = 0
                         listPlayerScore.forEach { pair ->
-                            list.add(pair.first)
+                            if (pair.first.idTeam == team1!!.idTeam) countTeam1++ else countTeam2++
                         }
-                        list.add(player)
-                        coroutineScope.launch {
-                            Log.e("Tpoo", "size: " + list.size)
-                            list.forEach{ player ->
-                                val deferredPlayer = async { addResultMatchViewModel.getPlayerById(player.idPlayer.toString()) }
-                                val pl = deferredPlayer.await()
-                                addResultMatchViewModel.updatePlayer(player = pl.copy(totalGoal = pl.totalGoal + 1))
+                        if (indexTeam == 0) countTeam1++ else countTeam2++
+                        if (countTeam1 != scoreTeam1 || countTeam2 != scoreTeam2) {
+                            numberPlayerScoreError = true
+                            Toast.makeText(
+                                context,
+                                "Số lượng bàn thắng và số lượng cầu thủ ghi bàn mỗi đội không phù hợp",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else numberPlayerScoreError = false
+
+                        // Thỏa mãn rule
+                        if (!namePlayerError && !numberPlayerScoreError && !minuteScoreError) {
+                            listPlayerScore.forEach { pair ->
+                                addResultMatchViewModel.addScore(pair.second)
+                            }
+                            val player =
+                                if (indexTeam == 0) listPlayersTeam1[indexPlayer!!] else listPlayersTeam2[indexPlayer!!]
+                            addResultMatchViewModel.addScore(
+                                Score(
+                                    idMatch = match!!.idMatch,
+                                    idPlayer = player.idPlayer,
+                                    time = minuteScore,
+                                    typeScore = typeScore
+                                )
+                            )
+                            val list = mutableListOf<Player>()
+                            listPlayerScore.forEach { pair ->
+                                list.add(pair.first)
+                            }
+                            list.add(player)
+                            coroutineScope.launch {
+                                Log.e("Tpoo", "size: " + list.size)
+                                list.forEach { player ->
+                                    val deferredPlayer =
+                                        async { addResultMatchViewModel.getPlayerById(player.idPlayer.toString()) }
+                                    val pl = deferredPlayer.await()
+                                    addResultMatchViewModel.updatePlayer(player = pl.copy(totalGoal = pl.totalGoal + 1))
+                                }
+
                             }
 
+
+                            // Update team??
+                            if (scoreTeam1 == scoreTeam2) {
+                                addResultMatchViewModel.updateTeam(
+                                    team1!!.copy(
+                                        tie = team1!!.tie + 1,
+                                        totalGoal = team1!!.totalGoal + scoreTeam1
+                                    )
+                                )
+                                addResultMatchViewModel.updateTeam(
+                                    team2!!.copy(
+                                        tie = team2!!.tie + 1,
+                                        totalGoal = team2!!.totalGoal + scoreTeam2
+                                    )
+                                )
+                            } else if (scoreTeam1 > scoreTeam2) {
+                                addResultMatchViewModel.updateTeam(
+                                    team1!!.copy(
+                                        win = team1!!.win + 1,
+                                        totalGoal = team1!!.totalGoal + scoreTeam1,
+                                        numberDiff = team1!!.numberDiff + scoreTeam1 - scoreTeam2
+                                    )
+                                )
+                                addResultMatchViewModel.updateTeam(
+                                    team2!!.copy(
+                                        lose = team2!!.lose + 1,
+                                        totalGoal = team2!!.totalGoal + scoreTeam2,
+                                        numberDiff = team2!!.numberDiff + scoreTeam2 - scoreTeam1
+                                    )
+                                )
+                            } else {
+                                addResultMatchViewModel.updateTeam(
+                                    team1!!.copy(
+                                        lose = team1!!.lose + 1,
+                                        totalGoal = team1!!.totalGoal + scoreTeam1,
+                                        numberDiff = team1!!.numberDiff + scoreTeam1 - scoreTeam2
+                                    )
+                                )
+                                addResultMatchViewModel.updateTeam(
+                                    team2!!.copy(
+                                        win = team2!!.win + 1,
+                                        totalGoal = team2!!.totalGoal + scoreTeam2,
+                                        numberDiff = team2!!.numberDiff + scoreTeam2 - scoreTeam1
+                                    )
+                                )
+                            }
+
+                            addResultMatchViewModel.updateMatch(
+                                match!!.copy(
+                                    resultTeam1 = scoreTeam1,
+                                    resultTeam2 = scoreTeam2,
+                                    status = Constant.STATUS_DONE
+                                )
+                            )
+
+                            Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show()
+                            navController.navigate(MainScreen.HomeScreen.route)
+
                         }
-
-
-
-                        // Update team??
-                        if (scoreTeam1 == scoreTeam2){
-                            addResultMatchViewModel.updateTeam(team1!!.copy(tie = team1!!.tie+1, totalGoal = team1!!.totalGoal + scoreTeam1))
-                            addResultMatchViewModel.updateTeam(team2!!.copy(tie = team2!!.tie+1, totalGoal = team2!!.totalGoal + scoreTeam2))
-                        } else if (scoreTeam1 > scoreTeam2){
-                            addResultMatchViewModel.updateTeam(team1!!.copy(win = team1!!.win + 1,
-                                totalGoal = team1!!.totalGoal + scoreTeam1, numberDiff = team1!!.numberDiff + scoreTeam1 - scoreTeam2))
-                            addResultMatchViewModel.updateTeam(team2!!.copy(lose = team2!!.lose + 1,
-                                totalGoal = team2!!.totalGoal + scoreTeam2, numberDiff = team2!!.numberDiff + scoreTeam2 - scoreTeam1))
-                        } else {
-                            addResultMatchViewModel.updateTeam(team1!!.copy(lose = team1!!.lose + 1,
-                                totalGoal = team1!!.totalGoal + scoreTeam1, numberDiff = team1!!.numberDiff + scoreTeam1 - scoreTeam2))
-                            addResultMatchViewModel.updateTeam(team2!!.copy(win = team2!!.win + 1,
-                                totalGoal = team2!!.totalGoal + scoreTeam2, numberDiff = team2!!.numberDiff + scoreTeam2 - scoreTeam1))
-                        }
-
-                        addResultMatchViewModel.updateMatch(match!!.copy(resultTeam1 = scoreTeam1, resultTeam2 = scoreTeam2,status = Constant.STATUS_DONE))
-
-                        Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show()
-                        navController.navigate(MainScreen.HomeScreen.route)
-
                     }
 
                 }, shape = RoundedCornerShape(24.dp),
@@ -572,7 +654,7 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                     modifier = modifier
                         .fillMaxWidth(0.95f)
                         .padding(8.dp)) {
-                    Text(text = "REGISTER",
+                    Text(text = "ADD RESULT",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White,
