@@ -51,6 +51,7 @@ import com.example.managefootball.ui.theme.ErrorColor
 import com.example.managefootball.ui.theme.GrayBackground
 import com.example.managefootball.ui.theme.GraySecondTextColor
 import com.example.managefootball.ui.theme.Green
+import com.example.managefootball.ui.theme.GreenBackground
 
 @Composable
 fun BottomBar(
@@ -77,14 +78,16 @@ fun BottomBar(
                 val selectedNavItem = currentRoute?.contains(item.route) == true
                 BottomNavigationItem(
                     icon = {
-                      Icon(imageVector = item.icon, contentDescription = item.title)
+                      Icon(imageVector = item.icon, contentDescription = item.title, tint = if (currentRoute == item.route) {
+                          GreenBackground
+                      } else Color.Black.copy(0.4f))
                     },
                     label = {
                         Text(
                             text = item.title,
                             fontWeight = FontWeight.SemiBold,
                             color = if (currentRoute == item.route) {
-                                Green
+                                GreenBackground
                             } else Color.Black.copy(0.4f)
                         )
                     },
@@ -260,24 +263,19 @@ fun InputField(
 
 @Composable
 fun EmptyContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
-        Spacer(modifier = Modifier.height(16.dp))
         Text(
             modifier = modifier.fillMaxWidth(),
             text = "Ooops! No Data",
-
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            color = Black,
+            fontSize = 30.sp,
+            color = Color.White,
             textAlign = TextAlign.Center,
         )
     }

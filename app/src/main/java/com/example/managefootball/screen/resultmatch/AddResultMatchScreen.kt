@@ -61,6 +61,9 @@ import com.example.managefootball.ui.theme.ErrorColor
 import com.example.managefootball.ui.theme.GrayBackground
 import com.example.managefootball.ui.theme.GraySecondTextColor
 import com.example.managefootball.ui.theme.Green
+import com.example.managefootball.ui.theme.GreenBackground
+import com.example.managefootball.ui.theme.WhiteBackground
+import com.example.managefootball.ui.theme.WhiteGrayBackground
 import com.example.managefootball.util.Constant
 import com.example.managefootball.util.InputField
 import com.example.managefootball.util.InputFieldWithTrailingIcon
@@ -126,7 +129,7 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
     }
 
     Scaffold(modifier = modifier.fillMaxSize(),
-        topBar = { TopBar(title = "Add Result Match"){
+        topBar = { TopBar(title = "Ghi kết quả trận đấu"){
             navController.popBackStack()
             }
         }
@@ -151,30 +154,41 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                             .fillMaxSize()
                             .padding(5.dp)
                             .height(150.dp),
-                        colors = CardDefaults.cardColors(containerColor = GrayBackground)
+                        colors = CardDefaults.cardColors(containerColor = WhiteBackground)
                     ) {
                         Column(
                             modifier = modifier
-                                .fillMaxSize()
+                                .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
+                            Text(
+                                text = "Sân: ${team1?.yardTeam ?: ""}",
+                                color = Black,
+                                modifier = modifier
+                                    .padding(3.dp)
+                                    .fillMaxWidth(),
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Normal,
+                                textAlign = TextAlign.Center
+                            )
+
                             Row(
                                 modifier = modifier
-                                    .fillMaxSize()
-                                    .weight(0.35f),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.Bottom
+                                    .fillMaxWidth().padding(5.dp),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
                                     text = team1?.nameTeam ?: "",
                                     fontSize = 30.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = Green,
-                                    modifier = modifier.padding(8.dp), textAlign = TextAlign.Left
+                                    color = Black,
+                                    modifier = modifier.fillMaxWidth().weight(0.3f), textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    text = "-",
+                                    text = "vs",
                                     color = Black,
-                                    modifier = modifier.padding(8.dp),
+                                    modifier = modifier.fillMaxWidth().weight(0.6f),
                                     fontSize = 30.sp,
                                     fontWeight = FontWeight.SemiBold,
                                     textAlign = TextAlign.Center
@@ -183,50 +197,32 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                                     text = team2?.nameTeam ?: "",
                                     fontSize = 30.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = Green,
-                                    modifier = modifier.padding(8.dp), textAlign = TextAlign.Right
+                                    color = Black,
+                                    modifier = modifier.fillMaxWidth().weight(0.3f), textAlign = TextAlign.Center
                                 )
-                            }
-                            Row(
+                                }
+
+                            Text(
+                                text = "Ngày: ${match?.day}",
+                                color = Black,
                                 modifier = modifier
-                                    .fillMaxSize()
-                                    .weight(0.25f),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "Sân: ${team1?.yardTeam ?: ""}",
-                                    color = Black,
-                                    modifier = modifier.padding(8.dp),
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                            Row(
+                                    .padding(3.dp)
+                                    .fillMaxWidth(),
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Normal,
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                text = "Giờ: ${match?.time}",
+                                color = Black,
                                 modifier = modifier
-                                    .fillMaxSize()
-                                    .weight(0.25f),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "Ngày: ${match?.day}",
-                                    color = Black,
-                                    modifier = modifier.padding(8.dp),
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    textAlign = TextAlign.Left
-                                )
-                                Text(
-                                    text = "Giờ: ${match?.time}",
-                                    color = Black,
-                                    modifier = modifier.padding(8.dp),
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    textAlign = TextAlign.Right
-                                )
-                            }
+                                    .padding(bottom = 3.dp)
+                                    .fillMaxWidth(),
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Normal,
+                                textAlign = TextAlign.Center
+                            )
+
                         }
 
                     }
@@ -240,6 +236,19 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                     )
 
                     Row(
+                        modifier = modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Tỉ số",
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 18.sp,
+                            color = Black
+                        )
+                    }
+
+                    Row(
                         modifier = modifier.fillMaxWidth()
                     ) {
                         Column(
@@ -250,8 +259,8 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                             horizontalAlignment = Alignment.Start
                         ) {
                             Text(
-                                text = "Tỉ số đội 1",
-                                modifier = Modifier.padding(bottom = 10.dp, end = 10.dp),
+                                text = "Đội 1",
+                                modifier = Modifier.padding(bottom = 10.dp, end = 10.dp, start = 10.dp),
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 15.sp,
                                 color = Black
@@ -268,11 +277,13 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                                 .fillMaxWidth()
                                 .padding(5.dp)
                                 .weight(0.5f),
-                            horizontalAlignment = Alignment.Start
                         ) {
                             Text(
-                                text = "Tỉ số đội 2",
-                                modifier = Modifier.padding(bottom = 10.dp, end = 10.dp),
+                                text = "Đội 2",
+                                modifier = Modifier
+                                    .padding(bottom = 10.dp, end = 10.dp, start = 5.dp)
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Right,
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 15.sp,
                                 color = Black
@@ -286,7 +297,18 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
 
                     }
 
-                    Spacer(modifier = modifier.height(8.dp))
+                    Row(
+                        modifier = modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Cầu thủ ghi bàn",
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 18.sp,
+                            color = Black
+                        )
+                    }
 
                     // Hiện danh sách cầu thủ
                     listPlayerScore.forEachIndexed { index, pair ->
@@ -494,9 +516,9 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                                 .padding(8.dp),
                             shape = RoundedCornerShape(8.dp),
                             colors = ButtonDefaults.buttonColors(Color.White),
-                            border = BorderStroke(2.dp, Green)
+                            border = BorderStroke(2.dp, GreenBackground)
                         ) {
-                            Text("Add Player", fontSize = 15.sp, fontWeight = FontWeight.Normal, color = Green,
+                            Text("Thêm cầu thủ", fontSize = 15.sp, fontWeight = FontWeight.Normal, color = GreenBackground,
                                 modifier = modifier.padding(8.dp))
                         }
                     }
@@ -650,11 +672,11 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                     }
 
                 }, shape = RoundedCornerShape(24.dp),
-                    colors = ButtonDefaults.buttonColors(Green),
+                    colors = ButtonDefaults.buttonColors(GreenBackground),
                     modifier = modifier
                         .fillMaxWidth(0.95f)
                         .padding(8.dp)) {
-                    Text(text = "ADD RESULT",
+                    Text(text = "Ghi kết quả",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White,

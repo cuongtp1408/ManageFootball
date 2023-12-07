@@ -59,6 +59,7 @@ import com.example.managefootball.nav.NavScreen
 import com.example.managefootball.ui.theme.ErrorColor
 import com.example.managefootball.ui.theme.GrayBackground
 import com.example.managefootball.ui.theme.Green
+import com.example.managefootball.ui.theme.GreenBackground
 import com.example.managefootball.util.AddMatchWorker
 import com.example.managefootball.util.BottomBar
 import com.example.managefootball.util.Constant
@@ -134,7 +135,7 @@ fun AddMatchScreen(modifier: Modifier = Modifier, navController: NavController, 
 
 
     Scaffold(
-        topBar = { TopBar(title = "Register Match"){
+        topBar = { TopBar(title = "Tạo trận đấu"){
             navController.popBackStack()
         } }
     ) { paddingValue ->
@@ -191,7 +192,7 @@ fun AddMatchScreen(modifier: Modifier = Modifier, navController: NavController, 
                         .weight(0.5f),
                         horizontalAlignment = Alignment.Start) {
                         Text(
-                            text = "Team 1",
+                            text = "Đội 1",
                             fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
@@ -234,7 +235,7 @@ fun AddMatchScreen(modifier: Modifier = Modifier, navController: NavController, 
                         .weight(0.5f),
                         horizontalAlignment = Alignment.Start) {
                         Text(
-                            text = "Team 2",
+                            text = "Đội 2",
                             fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
@@ -378,12 +379,12 @@ fun AddMatchScreen(modifier: Modifier = Modifier, navController: NavController, 
                     }
                 }
 
-            }, shape = RoundedCornerShape(24.dp),
-                colors = ButtonDefaults.buttonColors(Green),
+            }, shape = RoundedCornerShape(32.dp),
+                colors = ButtonDefaults.buttonColors(GreenBackground),
                 modifier = modifier
                     .fillMaxWidth(0.95f)
                     .padding(8.dp)) {
-                Text(text = "Add Match",
+                Text(text = "Thêm trận đấu",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.White,

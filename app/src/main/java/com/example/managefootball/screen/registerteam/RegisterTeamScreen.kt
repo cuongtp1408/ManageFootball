@@ -65,6 +65,7 @@ import com.example.managefootball.ui.theme.ErrorColor
 import com.example.managefootball.ui.theme.GrayBackground
 import com.example.managefootball.ui.theme.GraySecondTextColor
 import com.example.managefootball.ui.theme.Green
+import com.example.managefootball.ui.theme.GreenBackground
 import com.example.managefootball.ui.theme.Yellow
 import com.example.managefootball.util.Constant.TYPE_DOMESTIC
 import com.example.managefootball.util.Constant.TYPE_FOREIGN
@@ -120,7 +121,7 @@ fun RegisterTeamScreen(modifier: Modifier = Modifier, navController: NavControll
     var numberForeignPlayersError by remember{ mutableStateOf(false)}
 
     Scaffold(
-        topBar = { TopBar(title = "Register Team"){
+        topBar = { TopBar(title = "Đăng ký đội"){
             navController.popBackStack()
         } }
     ) { paddingValue ->
@@ -141,13 +142,13 @@ fun RegisterTeamScreen(modifier: Modifier = Modifier, navController: NavControll
                     onValueChange = {
                         nameTeam = it
                         nameTeamError = false},
-                    labelId = "Name Of Team",
+                    labelId = "Tên đội bóng",
                     isError = nameTeamError,
                     errorValue = "Tên đội không được để trống")
                 Spacer(modifier = modifier.height(3.dp))
                 InputField(modifier = modifier.fillMaxWidth(),value = yardTeam,
                     onValueChange = {yardTeam = it
-                        yardTeamError = false} ,labelId = "Yard Of Team",
+                        yardTeamError = false} ,labelId = "Sân nhà",
                     isError = yardTeamError,
                     errorValue = "Sân đội không được để trống")
 
@@ -183,16 +184,16 @@ fun RegisterTeamScreen(modifier: Modifier = Modifier, navController: NavControll
                             Row(modifier = modifier.fillMaxWidth()) {
                                 InputField(value = player.namePlayer, onValueChange = {
                                     players[index] = player.copy(namePlayer = it)
-                                }, labelId = "Name Of Player", modifier = modifier.weight(0.7f), readOnly = true)
+                                }, labelId = "Tên", modifier = modifier.weight(0.7f), readOnly = true)
 
                                 InputField(value = player.dateOfBirth, onValueChange = {
                                      players[index] = player.copy(dateOfBirth = it)
-                                }, labelId = "Date Of Birth", modifier = modifier.weight(0.4f), readOnly = true)
+                                }, labelId = "Ngày sinh", modifier = modifier.weight(0.4f), readOnly = true)
                             }
                             Row(modifier = modifier.fillMaxWidth()) {
                                 InputField(value = player.typePlayer, onValueChange = {
                                     players[index] = player.copy(typePlayer = it)
-                                }, labelId = "Type", modifier = modifier.weight(0.4f), readOnly = true
+                                }, labelId = "Loại", modifier = modifier.weight(0.4f), readOnly = true
                                 )
 
                                 InputField(value = player.notePlayer, onValueChange = {
@@ -229,13 +230,13 @@ fun RegisterTeamScreen(modifier: Modifier = Modifier, navController: NavControll
                         InputField(value = namePlayer, onValueChange = {
                             namePlayer = it
                             nameError = false
-                        }, labelId = "Name Of Player", modifier = modifier.weight(0.7f),
+                        }, labelId = "Tên", modifier = modifier.weight(0.7f),
                             isError = nameError,
                             errorValue = "Tên không được để trống")
 
                         InputFieldWithTrailingIcon(value = formattedDate, onValueChange = {
                             //
-                        }, labelId = "Date Of Birth", modifier = modifier.weight(0.4f),
+                        }, labelId = "Ngày sinh", modifier = modifier.weight(0.4f),
                             trailingIcon = {
                                 IconButton(onClick = {
                                     dateDialogState.show()
@@ -253,7 +254,7 @@ fun RegisterTeamScreen(modifier: Modifier = Modifier, navController: NavControll
                             .fillMaxWidth()) {
                             InputFieldWithTrailingIcon(value = typePlayer, onValueChange = {
                                //
-                            }, labelId = "Type", modifier = modifier.fillMaxWidth(),
+                            }, labelId = "Loại", modifier = modifier.fillMaxWidth(),
                                 trailingIcon = {
                                     IconButton(onClick = { expandedDropdown = true }) {
                                         Icon(imageVector = if (expandedDropdown) Icons.Default.KeyboardArrowUp
@@ -305,9 +306,9 @@ fun RegisterTeamScreen(modifier: Modifier = Modifier, navController: NavControll
                             .padding(8.dp),
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(Color.White),
-                        border = BorderStroke(2.dp, Green)
+                        border = BorderStroke(2.dp, GreenBackground)
                     ) {
-                        Text("Add Player", fontSize = 15.sp, fontWeight = FontWeight.Normal, color = Green,
+                        Text("Thêm cầu thủ", fontSize = 15.sp, fontWeight = FontWeight.Normal, color = GreenBackground,
                             modifier = modifier.padding(8.dp))
                     }
                 }
@@ -360,12 +361,12 @@ fun RegisterTeamScreen(modifier: Modifier = Modifier, navController: NavControll
                     navController.navigate(MainScreen.HomeScreen.route)
                 }
 
-            }, shape = RoundedCornerShape(24.dp),
-                colors = ButtonDefaults.buttonColors(Green),
+            }, shape = RoundedCornerShape(30.dp),
+                colors = ButtonDefaults.buttonColors(GreenBackground),
                 modifier = modifier
                     .fillMaxWidth(0.95f)
                     .padding(8.dp)) {
-                Text(text = "REGISTER",
+                Text(text = "Đăng ký đội",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.White,

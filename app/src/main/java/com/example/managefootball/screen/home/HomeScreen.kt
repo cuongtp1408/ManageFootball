@@ -1,5 +1,6 @@
 package com.example.managefootball.screen.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,10 +38,13 @@ import androidx.navigation.NavController
 import com.example.managefootball.model.Team
 import com.example.managefootball.nav.NavScreen
 import com.example.managefootball.screen.matchdetail.ScoreCard
+import com.example.managefootball.ui.theme.BlackBackground
+import com.example.managefootball.ui.theme.BlackBar
 import com.example.managefootball.ui.theme.BlueCard
 import com.example.managefootball.ui.theme.ErrorColor
 import com.example.managefootball.ui.theme.GrayBackground
 import com.example.managefootball.ui.theme.Green
+import com.example.managefootball.ui.theme.GreenBackground
 import com.example.managefootball.ui.theme.Yellow
 import com.example.managefootball.util.BottomBar
 import com.example.managefootball.util.Constant.LOSE
@@ -83,82 +87,94 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController,homeV
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { navController.navigate(NavScreen.RegisterTeamScreen.route) },
-                containerColor = Green,
+                containerColor = GreenBackground,
                 elevation = FloatingActionButtonDefaults.elevation(5.dp)
                 ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "add team", tint = Color.White)
             }
         }
     ) { paddingValues ->
-        Column(modifier = modifier
+        Column(modifier = modifier.background(BlackBackground)
             .padding(paddingValues)
             .fillMaxSize()) {
             Column(
-                modifier = modifier
+                modifier = modifier.background(GreenBackground)
                     .fillMaxSize()
-                    .padding(5.dp)
-                    .weight(0.15f),
+                    .weight(0.25f),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
+
             ) {
-                Text(text = "Bảng xếp hạng", fontWeight = FontWeight.SemiBold, fontSize = 25.sp, color = Green,
+                Text(text = "Bảng xếp hạng", fontWeight = FontWeight.SemiBold, fontSize = 30.sp, color = Color.White,
                     modifier = modifier.padding(3.dp))
-                Text(text = "Ngày: $formattedDate", fontWeight = FontWeight.SemiBold, fontSize = 25.sp, color = Green,
+                Text(text = "Ngày: $formattedDate", fontWeight = FontWeight.SemiBold, fontSize = 25.sp, color = Color.White,
                     modifier = modifier.padding(3.dp))
 
             }
             Card(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(5.dp)
-                    .height(50.dp), shape = RoundedCornerShape(10.dp),
-
+                    .height(50.dp), shape = RoundedCornerShape(0.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = GrayBackground
+                    containerColor = BlackBar
                 )
             ) {
                 Row(modifier = modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "Hạng",
                         fontSize = 17.sp,
-                        modifier = modifier.weight(0.15f),
-                        textAlign = TextAlign.Center
+                        modifier = modifier.weight(0.15f).padding(horizontal = 3.dp),
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
                     )
                     Text(
                         text = "Đội",
                         fontSize = 17.sp,
                         modifier = modifier.weight(0.3f),
-                        textAlign = TextAlign.Left
+                        textAlign = TextAlign.Left,
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
                     )
                     Text(
                         text = "Thắng",
                         fontSize = 17.sp,
                         modifier = modifier.weight(0.3f),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
                     )
                     Text(
                         text = "Hòa",
                         fontSize = 17.sp,
                         modifier = modifier.weight(0.2f),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
                     )
                     Text(
                         text = "Thua",
                         fontSize = 17.sp,
                         modifier = modifier.weight(0.2f),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
                     )
                     Text(
                         text = "Hiệu số",
                         fontSize = 17.sp,
                         modifier = modifier.weight(0.2f),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
                     )
                     Text(
                         text = "Điểm số",
                         fontSize = 17.sp,
                         modifier = modifier.weight(0.2f),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
 
@@ -167,7 +183,7 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController,homeV
             LazyColumn(modifier = modifier
                 .fillMaxSize()
                 .weight(0.85f)
-                .padding(5.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+               , verticalArrangement = Arrangement.spacedBy(0.dp)) {
                 items(listTeam_TotalScore.size){ index ->
                     TeamCard(team = listTeam_TotalScore[index].first, rank = index+1, score = listTeam_TotalScore[index].second)
                 }
@@ -182,55 +198,70 @@ fun TeamCard(modifier: Modifier = Modifier, team: Team?, rank: Int, score: Int =
         Card(
             modifier = modifier
                 .fillMaxWidth()
-                .height(50.dp), shape = RoundedCornerShape(10.dp),
+                .height(50.dp), shape = RoundedCornerShape(0.dp),
 
             colors = CardDefaults.cardColors(
-                containerColor = if (rank % 2 == 0) BlueCard.copy(0.7f) else Yellow.copy(0.4f)
+                containerColor = 
+                    if (rank == 1) GreenBackground else if (rank == 2) GreenBackground.copy(0.6f)
+                    else if (rank == 3) GreenBackground.copy(0.2f) else BlackBar
             )
         ) {
             Row(modifier = modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "$rank",
                     fontSize = 17.sp,
-                    modifier = modifier.weight(0.15f),
-                    textAlign = TextAlign.Center
+                    modifier = modifier.weight(0.15f).padding(horizontal = 3.dp),
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    fontWeight = FontWeight.W600
                 )
                 Text(
                     text = team.nameTeam,
                     fontSize = 17.sp,
                     modifier = modifier.weight(0.3f),
-                    textAlign = TextAlign.Left
+                    textAlign = TextAlign.Left,
+                    color = Color.White,
+                    fontWeight = FontWeight.W600
                 )
                 Text(
                     text = team.win.toString(),
                     fontSize = 17.sp,
                     modifier = modifier.weight(0.2f),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    fontWeight = FontWeight.W600
                 )
                 Text(
                     text = team.tie.toString(),
                     fontSize = 17.sp,
                     modifier = modifier.weight(0.2f),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    fontWeight = FontWeight.W600
                 )
                 Text(
                     text = team.lose.toString(),
                     fontSize = 17.sp,
                     modifier = modifier.weight(0.2f),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    fontWeight = FontWeight.W600
                 )
                 Text(
                     text = if (team.numberDiff>=0) "+${team.numberDiff}" else "${team.numberDiff}",
                     fontSize = 17.sp,
                     modifier = modifier.weight(0.2f),
                     textAlign = TextAlign.Center,
-                    color = if (team.numberDiff>=0) Green else ErrorColor
+                    color = if (team.numberDiff>=0) BlueCard else ErrorColor,
+                    fontWeight = FontWeight.W600
                 )
                 Text(
                     text = score.toString(),
                     fontSize = 17.sp,
                     modifier = modifier.weight(0.2f),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    fontWeight = FontWeight.W600
                 )
             }
 

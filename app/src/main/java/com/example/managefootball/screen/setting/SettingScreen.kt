@@ -3,6 +3,7 @@ package com.example.managefootball.screen.setting
 import android.graphics.Paint.Align
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontStyle
@@ -43,6 +46,7 @@ import com.example.managefootball.ui.theme.ErrorColor
 import com.example.managefootball.ui.theme.GrayBackground
 import com.example.managefootball.ui.theme.GraySecondTextColor
 import com.example.managefootball.ui.theme.Green
+import com.example.managefootball.ui.theme.GreenBackground
 import com.example.managefootball.util.BottomBar
 import com.example.managefootball.util.InputField
 import com.example.managefootball.util.extractNumbers
@@ -160,47 +164,61 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Row(modifier = modifier
-                .fillMaxWidth()
-                .height(50.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "Cài đặt",
-                    fontSize = 25.sp,
-                    modifier = modifier
-                        .weight(0.8f),
-                    textAlign = TextAlign.Center
-                )
-                Button(onClick = {
 
-                    if (!isError){
-                        settingViewModel.setMinYears(minYearState)
-                        settingViewModel.setMaxYears(maxYearsState)
-                        settingViewModel.setMinPlayers(minPlayersState)
-                        settingViewModel.setMaxPlayers(maxPlayersState)
-                        settingViewModel.setMaxForeignPlayers(maxForeignPlayersState)
-                        settingViewModel.setMaxScores(maxScoresState)
-                        settingViewModel.setMaxMinutes(maxMinutesState)
-                        settingViewModel.setWinScore(winScoreState)
-                        settingViewModel.setTieScore(tieScoreState)
-                        settingViewModel.setLoseScore(loseScoreState)
-                        settingViewModel.setPriorityTotalScore(priorityTotalScoreState)
-                        settingViewModel.setPriorityNumberDifferent(priorityNumberDifferentState)
-                        settingViewModel.setPriorityTotalGoal(priorityTotalGoalState)
-                        settingViewModel.setPriorityTotalMatch(priorityTotalMatchState)
-                        Toast.makeText(context, "Thay đổi thành công", Toast.LENGTH_SHORT).show()
-                        keyboard?.hide()
-                        navController.navigate(MainScreen.HomeScreen.route)
-                    }
-                }, modifier = modifier
-                    .weight(0.3f), colors = ButtonDefaults.buttonColors(
-                        if (!isError) Green else GraySecondTextColor.copy(0.3f)
-                    )) {
-                    Text(text = "Save", fontSize = 17.sp, textAlign = TextAlign.Center, modifier = modifier.fillMaxSize())
-                }
+            Column(
+                modifier = modifier
+                    .background(GreenBackground)
+                    .fillMaxSize()
+                    .weight(0.25f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                ) {
+                Text(text = "Cài đặt quy định", fontWeight = FontWeight.SemiBold, fontSize = 30.sp, color = Color.White,
+                    modifier = modifier.padding(3.dp))
+
             }
+//            Row(modifier = modifier
+//                .fillMaxWidth()
+//                .height(50.dp), verticalAlignment = Alignment.CenterVertically) {
+//                Text(
+//                    text = "Cài đặt",
+//                    fontSize = 25.sp,
+//                    modifier = modifier
+//                        .weight(0.8f),
+//                    textAlign = TextAlign.Center
+//                )
+//                Button(onClick = {
+//
+//                    if (!isError){
+//                        settingViewModel.setMinYears(minYearState)
+//                        settingViewModel.setMaxYears(maxYearsState)
+//                        settingViewModel.setMinPlayers(minPlayersState)
+//                        settingViewModel.setMaxPlayers(maxPlayersState)
+//                        settingViewModel.setMaxForeignPlayers(maxForeignPlayersState)
+//                        settingViewModel.setMaxScores(maxScoresState)
+//                        settingViewModel.setMaxMinutes(maxMinutesState)
+//                        settingViewModel.setWinScore(winScoreState)
+//                        settingViewModel.setTieScore(tieScoreState)
+//                        settingViewModel.setLoseScore(loseScoreState)
+//                        settingViewModel.setPriorityTotalScore(priorityTotalScoreState)
+//                        settingViewModel.setPriorityNumberDifferent(priorityNumberDifferentState)
+//                        settingViewModel.setPriorityTotalGoal(priorityTotalGoalState)
+//                        settingViewModel.setPriorityTotalMatch(priorityTotalMatchState)
+//                        Toast.makeText(context, "Thay đổi thành công", Toast.LENGTH_SHORT).show()
+//                        keyboard?.hide()
+//                        navController.navigate(MainScreen.HomeScreen.route)
+//                    }
+//                }, modifier = modifier
+//                    .weight(0.3f), colors = ButtonDefaults.buttonColors(
+//                        if (!isError) Green else GraySecondTextColor.copy(0.3f)
+//                    )) {
+//                    Text(text = "Save", fontSize = 17.sp, textAlign = TextAlign.Center, modifier = modifier.fillMaxSize())
+//                }
+//            }
             LazyColumn(modifier = modifier
                 .fillMaxSize()
-                .padding(12.dp),
+                .weight(0.85f)
+                .padding(5.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.Start){
                 item {
@@ -219,12 +237,15 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                         )
 
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(modifier = modifier
                                 .fillMaxWidth()
-                                .weight(0.7f), verticalArrangement = Arrangement.Top,
+                                .weight(0.7f), verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.Start) {
                                 Text(
                                     text = "Độ tuổi tối thiểu",
@@ -257,8 +278,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                             )
                         }
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = "Độ tuổi tối đa",
@@ -283,8 +307,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                             )
                         }
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(modifier = modifier
                                 .fillMaxWidth()
@@ -320,8 +347,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                             )
                         }
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = "Số lượng cầu thủ tối đa",
@@ -346,8 +376,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                             )
                         }
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = "Số lượng cầu thủ nước ngoài tối đa",
@@ -389,8 +422,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                         )
 
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(modifier = modifier
                                 .fillMaxWidth()
@@ -426,8 +462,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                             )
                         }
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(modifier = modifier
                                 .fillMaxWidth()
@@ -500,8 +539,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
 
 
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = "Điểm thắng",
@@ -526,8 +568,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                             )
                         }
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = "Điểm hòa",
@@ -552,8 +597,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                             )
                         }
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = "Điểm thua",
@@ -611,8 +659,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
 
 
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = "Điểm số",
@@ -637,8 +688,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                             )
                         }
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = "Hiệu số",
@@ -663,8 +717,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                             )
                         }
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = "Tổng số bàn thắng",
@@ -689,8 +746,11 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                             )
                         }
                         Row(
-                            modifier = modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = "Tổng số trận đối kháng",
@@ -713,6 +773,48 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                                 , modifier = modifier.weight(0.3f)
 
                             )
+                        }
+                    }
+                }
+                item{
+                    Row(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(3.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(onClick = {
+                            if (!isError){
+                                settingViewModel.setMinYears(minYearState)
+                                settingViewModel.setMaxYears(maxYearsState)
+                                settingViewModel.setMinPlayers(minPlayersState)
+                                settingViewModel.setMaxPlayers(maxPlayersState)
+                                settingViewModel.setMaxForeignPlayers(maxForeignPlayersState)
+                                settingViewModel.setMaxScores(maxScoresState)
+                                settingViewModel.setMaxMinutes(maxMinutesState)
+                                settingViewModel.setWinScore(winScoreState)
+                                settingViewModel.setTieScore(tieScoreState)
+                                settingViewModel.setLoseScore(loseScoreState)
+                                settingViewModel.setPriorityTotalScore(priorityTotalScoreState)
+                                settingViewModel.setPriorityNumberDifferent(priorityNumberDifferentState)
+                                settingViewModel.setPriorityTotalGoal(priorityTotalGoalState)
+                                settingViewModel.setPriorityTotalMatch(priorityTotalMatchState)
+                                Toast.makeText(context, "Thay đổi thành công", Toast.LENGTH_SHORT).show()
+                                keyboard?.hide()
+                                navController.navigate(MainScreen.HomeScreen.route)
+                            }
+                        },
+                            shape = RoundedCornerShape(24.dp),
+                            colors = ButtonDefaults.buttonColors(GreenBackground),
+                            modifier = modifier
+                                .fillMaxWidth(0.95f)
+                                .padding(8.dp)) {
+                            Text(text = "Lưu",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White,
+                                modifier = modifier.padding(8.dp))
                         }
                     }
                 }

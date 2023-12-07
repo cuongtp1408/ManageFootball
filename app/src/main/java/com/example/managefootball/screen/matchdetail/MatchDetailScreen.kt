@@ -1,6 +1,7 @@
 package com.example.managefootball.screen.matchdetail
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,11 +33,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.managefootball.ui.theme.Black
+import com.example.managefootball.ui.theme.BlackBackground
+import com.example.managefootball.ui.theme.BlackBar
 import com.example.managefootball.ui.theme.BlueCard
 import com.example.managefootball.ui.theme.ErrorColor
 import com.example.managefootball.ui.theme.GrayBackground
 import com.example.managefootball.ui.theme.GraySecondTextColor
 import com.example.managefootball.ui.theme.Green
+import com.example.managefootball.ui.theme.WhiteBackground
+import com.example.managefootball.ui.theme.WhiteGrayBackground
 import com.example.managefootball.ui.theme.Yellow
 import com.example.managefootball.util.Constant
 import com.example.managefootball.util.TopBar
@@ -70,7 +75,7 @@ fun MatchDetailScreen(modifier: Modifier = Modifier,navController: NavController
     }
 
     Scaffold(modifier = modifier.fillMaxSize(),
-        topBar = { TopBar(title = "Detail Result Match"){
+        topBar = { TopBar(title = "Kết quả trận đấu"){
             navController.popBackStack()
         }}
     ) { paddingValues ->
@@ -83,111 +88,90 @@ fun MatchDetailScreen(modifier: Modifier = Modifier,navController: NavController
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Card(modifier = modifier
-                    .fillMaxSize()
-                    .padding(5.dp)
-                    .weight(0.3f),
-                    colors = CardDefaults.cardColors(containerColor = GrayBackground)) {
+                Card(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
+                        .height(150.dp),
+                    colors = CardDefaults.cardColors(containerColor = WhiteBackground)
+                ) {
                     Column(
                         modifier = modifier
-                            .fillMaxSize()
-
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
+                        Text(
+                            text = "Sân: ${team1?.yardTeam ?: ""}",
+                            color = Black,
+                            modifier = modifier
+                                .padding(3.dp)
+                                .fillMaxWidth(),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Center
+                        )
+
                         Row(
                             modifier = modifier
-                                .fillMaxSize()
-                                .weight(0.5f),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.Bottom
+                                .fillMaxWidth().padding(5.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = team1?.nameTeam ?: "",
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Green,
-                                modifier = modifier.padding(8.dp), textAlign = TextAlign.Left
-                            )
-                            Text(
-                                text = match?.resultTeam1.toString(),
-                                color = ErrorColor,
-                                modifier = modifier.padding(8.dp),
-                                fontSize = 30.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                textAlign = TextAlign.Left
-                            )
-                            Text(
-                                text = "-",
                                 color = Black,
-                                modifier = modifier.padding(8.dp),
+                                modifier = modifier.fillMaxWidth().weight(0.3f), textAlign = TextAlign.Center
+                            )
+                            Text(
+                                text = "${match?.resultTeam1}   -   ${match?.resultTeam2}",
+                                color = Black,
+                                modifier = modifier.fillMaxWidth().weight(0.6f).background(
+                                    WhiteGrayBackground),
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 textAlign = TextAlign.Center
-                            )
-                            Text(
-                                text = match?.resultTeam2.toString(),
-                                color = ErrorColor,
-                                modifier = modifier.padding(8.dp),
-                                fontSize = 30.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                textAlign = TextAlign.Right
                             )
                             Text(
                                 text = team2?.nameTeam ?: "",
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Green,
-                                modifier = modifier.padding(8.dp), textAlign = TextAlign.Right
+                                color = Black,
+                                modifier = modifier.fillMaxWidth().weight(0.3f), textAlign = TextAlign.Center
                             )
                         }
-                        Row(
+
+                        Text(
+                            text = "Ngày: ${match?.day}",
+                            color = Black,
                             modifier = modifier
-                                .fillMaxSize()
-                                .weight(0.25f),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Sân: ${team1?.yardTeam ?: ""}",
-                                color = Black,
-                                modifier = modifier.padding(8.dp),
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Normal,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                        Row(
+                                .padding(3.dp)
+                                .fillMaxWidth(),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = "Giờ: ${match?.time}",
+                            color = Black,
                             modifier = modifier
-                                .fillMaxSize()
-                                .weight(0.25f),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Ngày: ${match?.day}",
-                                color = Black,
-                                modifier = modifier.padding(8.dp),
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Normal,
-                                textAlign = TextAlign.Left
-                            )
-                            Text(
-                                text = "Giờ: ${match?.time}",
-                                color = Black,
-                                modifier = modifier.padding(8.dp),
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Normal,
-                                textAlign = TextAlign.Right
-                            )
-                        }
+                                .padding(bottom = 3.dp)
+                                .fillMaxWidth(),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Center
+                        )
+
                     }
 
                 }
                 Card(modifier = modifier
-                    .fillMaxWidth().padding(5.dp)
-                    .height(50.dp)
+                    .fillMaxWidth().padding(top = 8.dp, start = 5.dp, end = 5.dp)
+                    .height(60.dp)
                     , shape = RoundedCornerShape(10.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = GrayBackground
+                        containerColor = BlackBar.copy(0.3f)
                     )) {
                     Row(modifier = modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                         Text(
@@ -224,9 +208,8 @@ fun MatchDetailScreen(modifier: Modifier = Modifier,navController: NavController
 
                 }
                 LazyColumn(modifier = modifier
-                    .fillMaxSize()
-                    .weight(0.75f)
-                    .padding(5.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                    .fillMaxSize().padding(start = 5.dp, end = 5.dp)
+                    , verticalArrangement = Arrangement.spacedBy(0.dp)) {
                     items(listPlayers.size){ index ->
                         val nameTeam = if (listPlayers[index].idTeam==team1!!.idTeam) team1!!.nameTeam else team2!!.nameTeam
                         ScoreCard(num = index+1, name = listPlayers[index].namePlayer,
@@ -247,7 +230,7 @@ fun ScoreCard(modifier: Modifier = Modifier, num: Int, name: String, nameTeam: S
         , shape = RoundedCornerShape(10.dp),
 
         colors = CardDefaults.cardColors(
-            containerColor = if (num%2==0) BlueCard.copy(0.7f) else Yellow.copy(0.4f)
+            WhiteBackground
         )) {
         Row(modifier = modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
             Text(

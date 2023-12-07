@@ -2,6 +2,7 @@
 
 package com.example.managefootball.screen.players
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,9 +50,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.managefootball.model.Player
 import com.example.managefootball.model.Team
+import com.example.managefootball.ui.theme.BlackBackground
+import com.example.managefootball.ui.theme.BlackBar
 import com.example.managefootball.ui.theme.BlueCard
 import com.example.managefootball.ui.theme.GrayBackground
 import com.example.managefootball.ui.theme.GraySecondTextColor
+import com.example.managefootball.ui.theme.GreenBackground
 import com.example.managefootball.ui.theme.Yellow
 import com.example.managefootball.util.BottomBar
 import com.example.managefootball.util.EmptyContent
@@ -76,21 +80,38 @@ fun PlayersScreen(modifier : Modifier = Modifier, navController: NavController, 
 //        } else {
             Column(
                 modifier = modifier
+                    .background(BlackBackground)
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
-                SearchBar { query ->
-                    playersViewModel.searchPlayers(query)
+                Column(
+                    modifier = modifier
+                        .background(GreenBackground)
+                        .fillMaxSize()
+                        .weight(0.25f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+
+                    ) {
+                    SearchBar { query ->
+                        playersViewModel.searchPlayers(query)
+                    }
+
+                    Spacer(modifier = modifier.height(10.dp))
+
+                    Text(text = "Danh sách cầu thủ", fontWeight = FontWeight.SemiBold, fontSize = 30.sp, color = Color.White,
+                        modifier = modifier.padding(3.dp))
+
+
                 }
 
-                Spacer(modifier = modifier.height(10.dp))
 
                 Card(modifier = modifier
-                    .fillMaxWidth().padding(5.dp)
+                    .fillMaxWidth()
                     .height(50.dp)
-                    , shape = RoundedCornerShape(10.dp),
+                    , shape = RoundedCornerShape(0.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = GrayBackground
+                        containerColor = BlackBar
                     )) {
                     Row(
                         modifier = modifier.fillMaxSize(),
@@ -99,42 +120,68 @@ fun PlayersScreen(modifier : Modifier = Modifier, navController: NavController, 
                         Text(
                             text = "STT",
                             fontSize = 17.sp,
-                            modifier = modifier.weight(0.1f),
-                            textAlign = TextAlign.Center
+                            modifier = modifier
+                                .weight(0.1f)
+                                .padding(horizontal = 3.dp),
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
                         )
                         Text(
                             text = "Cầu thủ",
                             fontSize = 17.sp,
                             modifier = modifier.weight(0.3f),
-                            textAlign = TextAlign.Left
+                            textAlign = TextAlign.Left,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
                         )
                         Text(
                             text = "Đội",
                             fontSize = 17.sp,
                             modifier = modifier.weight(0.3f),
-                            textAlign = TextAlign.Left
+                            textAlign = TextAlign.Left,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
                         )
                         Text(
-                            text = "Loại cầu thủ",
+                            text = "Loại",
                             fontSize = 17.sp,
                             modifier = modifier.weight(0.2f),
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
                         )
                         Text(
-                            text = "Số bàn thắng",
+                            text = "Bàn thắng",
                             fontSize = 17.sp,
                             modifier = modifier.weight(0.2f),
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
                         )
                     }
                 }
 
                 if (listPlayersWithTeams.isEmpty()) {
-                    EmptyContent()
+                    Column(
+                        modifier = modifier.fillMaxSize().weight(0.85f),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            modifier = modifier.fillMaxWidth(),
+                            text = "Ooops! No Data",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 30.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
                 } else {
-                    LazyColumn(
-                        modifier = modifier.padding(5.dp),
-                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                    LazyColumn(modifier = modifier
+                        .fillMaxSize()
+                        .weight(0.85f),
+                        verticalArrangement = Arrangement.spacedBy(0.dp)
                     ) {
                         items(listPlayersWithTeams.size) { index ->
                             PlayerCard( stt = index + 1,player = listPlayersWithTeams[index])
@@ -153,41 +200,53 @@ fun PlayerCard(modifier: Modifier = Modifier,stt: Int, player: Pair<Player, Team
     Card(modifier = modifier
         .fillMaxWidth()
         .height(50.dp)
-        , shape = RoundedCornerShape(10.dp),
+        , shape = RoundedCornerShape(0.dp),
 
         colors = CardDefaults.cardColors(
-            containerColor = if (stt%2==0) BlueCard.copy(0.7f) else Yellow.copy(0.4f)
+            containerColor = if (stt%2==0) BlackBar else GreenBackground
         )) {
         Row(modifier = modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = "$stt",
                 fontSize = 17.sp,
-                modifier = modifier.weight(0.1f),
-                textAlign = TextAlign.Center
+                modifier = modifier
+                    .weight(0.1f)
+                    .padding(horizontal = 3.dp),
+                textAlign = TextAlign.Center,
+                color = Color.White,
+                fontWeight = FontWeight.W600
             )
             Text(
                 text = player.first.namePlayer,
                 fontSize = 17.sp,
                 modifier = modifier.weight(0.3f),
-                textAlign = TextAlign.Left
+                textAlign = TextAlign.Left,
+                color = Color.White,
+                fontWeight = FontWeight.W600
             )
             Text(
                 text = player.second.nameTeam,
                 fontSize = 17.sp,
                 modifier = modifier.weight(0.3f),
-                textAlign = TextAlign.Left
+                textAlign = TextAlign.Left,
+                color = Color.White,
+                fontWeight = FontWeight.W600
             )
             Text(
                 text = player.first.typePlayer,
                 fontSize = 17.sp,
                 modifier = modifier.weight(0.2f),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = Color.White,
+                fontWeight = FontWeight.W600
             )
             Text(
                 text = "${player.first.totalGoal}",
                 fontSize = 17.sp,
                 modifier = modifier.weight(0.2f),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = Color.White,
+                fontWeight = FontWeight.W600
             )
         }
 
@@ -209,7 +268,7 @@ fun SearchBar(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
             .padding(12.dp)
             .fillMaxWidth()
             .height(50.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(24.dp))
         ,
         placeholder = {
             Text(
@@ -221,12 +280,12 @@ fun SearchBar(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
         }, trailingIcon = {
             IconButton(onClick = { onSearch(query.value) }) {
                 Icon(imageVector = Icons.Default.Search, contentDescription = "search",
-                    tint = Color.Black)
+                    tint = BlackBar)
             }
         },
         singleLine = true,
         colors = TextFieldDefaults.textFieldColors(
-            containerColor = GrayBackground,
+            containerColor = Color.White,
             disabledIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent

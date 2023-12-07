@@ -1,7 +1,9 @@
 package com.example.managefootball.screen.match
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,9 +47,13 @@ import com.example.managefootball.model.MatchTeams
 import com.example.managefootball.model.Team
 import com.example.managefootball.nav.NavScreen
 import com.example.managefootball.ui.theme.Black
+import com.example.managefootball.ui.theme.BlackBackground
 import com.example.managefootball.ui.theme.BlueCard
 import com.example.managefootball.ui.theme.ErrorColor
 import com.example.managefootball.ui.theme.Green
+import com.example.managefootball.ui.theme.GreenBackground
+import com.example.managefootball.ui.theme.WhiteBackground
+import com.example.managefootball.ui.theme.WhiteGrayBackground
 import com.example.managefootball.ui.theme.Yellow
 import com.example.managefootball.util.BottomBar
 import com.example.managefootball.util.Constant.STATUS_DONE
@@ -57,6 +63,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllMatchesScreen(modifier: Modifier = Modifier,navController: NavController,
@@ -78,7 +85,7 @@ fun AllMatchesScreen(modifier: Modifier = Modifier,navController: NavController,
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { navController.navigate(NavScreen.AddMatchScreen.route) },
-                containerColor = Green,
+                containerColor = GreenBackground,
                 elevation = FloatingActionButtonDefaults.elevation(5.dp)
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "add match", tint = Color.White)
@@ -89,10 +96,28 @@ fun AllMatchesScreen(modifier: Modifier = Modifier,navController: NavController,
             CircularProgressIndicator()
         } else{
         Column(modifier = modifier
+            .background(BlackBackground)
             .padding(paddingValues)
             .fillMaxSize()) {
-            Spacer(modifier = modifier.height(8.dp))
-                LazyColumn {
+            Column(
+                modifier = modifier
+                    .background(GreenBackground)
+                    .fillMaxSize()
+                    .weight(0.25f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+
+                ) {
+                Text(text = "Lịch thi đấu", fontWeight = FontWeight.SemiBold, fontSize = 30.sp, color = Color.White,
+                    modifier = modifier.padding(3.dp))
+            }
+
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize().weight(0.85f)
+                    .padding(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                     items(listMatchTeams.size) { index ->
                     val isDone = convertStringToDate(listMatches[index].day) <= convertStringToDate(currentDate)
                         MatchCard(
@@ -121,67 +146,95 @@ fun AllMatchesScreen(modifier: Modifier = Modifier,navController: NavController,
 fun MatchCard(modifier: Modifier = Modifier, match: Match, team1: Team, team2: Team, isDone: Boolean, onClick:(Boolean) -> Unit = {}){
     Card(modifier = modifier
         .fillMaxWidth()
-        .height(150.dp)
-        .padding(8.dp).clickable{
+        .height(60.dp)
+        .clickable {
             onClick(isDone)
         }, shape = RoundedCornerShape(10.dp),
-        elevation = CardDefaults.cardElevation(5.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (match.status == STATUS_PROGRESS && isDone) BlueCard.copy(0.6f) else if (match.status == STATUS_PROGRESS && !isDone)  Yellow else Green
+            containerColor = WhiteBackground
+//            containerColor = if (match.status == STATUS_PROGRESS && isDone) BlueCard.copy(0.6f) else if (match.status == STATUS_PROGRESS && !isDone)  Yellow else Green
         )) {
-        Spacer(modifier = modifier.height(8.dp))
         Row(modifier = modifier
-            .fillMaxSize()
-            .padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            .fillMaxSize().padding(horizontal = 25.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(text = team1.nameTeam,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
-                modifier = modifier.padding(8.dp), textAlign = TextAlign.Left)
+                modifier = modifier.padding(8.dp).fillMaxWidth().weight(0.3f), textAlign = TextAlign.Left)
 
             if (match.status == STATUS_PROGRESS && !isDone){
                 Column( horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Top) {
+                    verticalArrangement = Arrangement.Center,
+                    modifier = modifier.fillMaxWidth().weight(0.5f)
+                    ) {
+                    Row(
+                        modifier = modifier.fillMaxWidth().background(WhiteGrayBackground),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = match.day,
+                            color = Black,modifier = modifier.padding(3.dp),
+                            fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                    }
+                    Spacer(modifier = modifier.height(3.dp))
                     Text(text = STATUS_PROGRESS,
-                        color = ErrorColor,modifier = modifier.padding(8.dp),
-                        fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                    Text(text = match.day,
-                        color = Black,modifier = modifier.padding(8.dp),
-                        fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                    Text(text = match.time,
-                        color = Black,modifier = modifier.padding(8.dp),
+                        color = ErrorColor,modifier = modifier.padding(3.dp),
                         fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
                 }
             } else if (match.status == STATUS_PROGRESS && isDone) {
                 Column( horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Top) {
+                    verticalArrangement = Arrangement.Center,
+                    modifier = modifier.fillMaxWidth().weight(0.5f)
+                ) {
+                    Row(
+                        modifier = modifier.fillMaxWidth().background(WhiteGrayBackground),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = match.day,
+                            color = Black,modifier = modifier.padding(3.dp),
+                            fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                    }
                     Text(text = "Chưa ghi kết quả",
-                        color = ErrorColor,modifier = modifier.padding(8.dp),
-                        fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                    Text(text = match.day,
-                        color = Black,modifier = modifier.padding(8.dp),
-                        fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                    Text(text = match.time,
-                        color = Black,modifier = modifier.padding(8.dp),
-                        fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                        color = ErrorColor,modifier = modifier.padding(3.dp),
+                        fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
                 }
             } else {
-                Text(text =match.resultTeam1.toString(),
-                    color = ErrorColor,modifier = modifier.padding(8.dp),
-                    fontSize = 18.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Left)
-                Text(text = "-",
-                    color = Black,modifier = modifier.padding(8.dp),
-                    fontSize = 18.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
-                Text(text = match.resultTeam2.toString(),
-                    color = ErrorColor,modifier = modifier.padding(8.dp),
-                    fontSize = 18.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Right)
+                Row(modifier = modifier.background(WhiteGrayBackground).fillMaxWidth(0.5f), horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                    Text(
+                        text = match.resultTeam1.toString(),
+                        color = Black,
+                        modifier = modifier.padding(3.dp),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Left
+                    )
+                    Text(
+                        text = "-",
+                        color = Black,
+                        modifier = modifier.padding(3.dp),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = match.resultTeam2.toString(),
+                        color =Black,
+                        modifier = modifier.padding(3.dp),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Right
+                    )
+                }
             }
 
             Text(text = team2.nameTeam,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
-                modifier = modifier.padding(8.dp), textAlign = TextAlign.Right)
+                modifier = modifier.padding(8.dp).fillMaxWidth().weight(0.3f), textAlign = TextAlign.Right)
         }
     }
 }
