@@ -153,7 +153,14 @@ fun RegisterTeamScreen(modifier: Modifier = Modifier, navController: NavControll
                     errorValue = "Sân đội không được để trống")
 
                 Text(
-                    text = "- Số lượng cầu thủ của mỗi đội phải từ $minPlayers đến $maxPlayers",
+                    text = "- Số lượng cầu thủ của mỗi đội phải từ $minPlayers đến $maxYears",
+                    modifier = Modifier.padding(bottom = 10.dp, start = 10.dp, end = 10.dp),
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 15.sp,
+                    color = ErrorColor
+                )
+                Text(
+                    text = "- Độ tuổi của cầu thủ phải từ $minYears đến $maxPlayers",
                     modifier = Modifier.padding(bottom = 10.dp, start = 10.dp, end = 10.dp),
                     fontStyle = FontStyle.Italic,
                     fontSize = 15.sp,

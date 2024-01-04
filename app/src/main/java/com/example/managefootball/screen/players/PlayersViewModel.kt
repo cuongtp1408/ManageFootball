@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,7 +36,11 @@ class PlayersViewModel @Inject constructor(
 
     fun searchPlayers(query: String){
         viewModelScope.launch {
-            footballRepository.searchPlayer(query).collect {
+            footballRepository.searchPlayer(query).map { players->
+                players.sortedByDescending {
+                    it.totalGoal
+                }
+            }.collect {
                 _listPlayers.value = it
             }
         }

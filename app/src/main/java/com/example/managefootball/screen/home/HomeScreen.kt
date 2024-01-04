@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -66,15 +68,43 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController,homeV
     val tieScore by homeViewModel.tieScore.collectAsState()
     val loseScore by homeViewModel.loseScore.collectAsState()
     val listTotalScore = listTeams.map { it.lose*loseScore + it.tie*tieScore + it.win*winScore }
+    val isLoading = homeViewModel.isLoading
 
     val listTeam_TotalScore = listTeams.zip(listTotalScore).sortedWith(
         compareBy(
-            {if (priorityTotalScore == 1) -it.second else if (priorityNumberDifferent==1) -it.first.numberDiff else if (priorityTotalGoal==1) -it.first.totalGoal else  -(it.first.win+it.first.lose+it.first.tie)},
-            {if (priorityTotalScore == 2) -it.second else if (priorityNumberDifferent==2) -it.first.numberDiff else if (priorityTotalGoal==2) -it.first.totalGoal else  -(it.first.win+it.first.lose+it.first.tie)},
-            {if (priorityTotalScore == 3) -it.second else if (priorityNumberDifferent==3) -it.first.numberDiff else if (priorityTotalGoal==3) -it.first.totalGoal else  -(it.first.win+it.first.lose+it.first.tie)},
-            {if (priorityTotalScore == 4) -it.second else if (priorityNumberDifferent==4) -it.first.numberDiff else if (priorityTotalGoal==4) -it.first.totalGoal else  -(it.first.win+it.first.lose+it.first.tie)}
+            {if (priorityTotalScore == 1) -it.second else if (priorityNumberDifferent==1) -it.first.numberDiff else if (priorityTotalGoal==1) -it.first.totalGoal else  -(it.first.win-it.first.lose)},
+            {if (priorityTotalScore == 2) -it.second else if (priorityNumberDifferent==2) -it.first.numberDiff else if (priorityTotalGoal==2) -it.first.totalGoal else  -(it.first.win-it.first.lose)},
+            {if (priorityTotalScore == 3) -it.second else if (priorityNumberDifferent==3) -it.first.numberDiff else if (priorityTotalGoal==3) -it.first.totalGoal else  -(it.first.win-it.first.lose)},
+            {if (priorityTotalScore == 4) -it.second else if (priorityNumberDifferent==4) -it.first.numberDiff else if (priorityTotalGoal==4) -it.first.totalGoal else  -(it.first.win-it.first.lose)}
         )
     )
+    val rankedTeam = mutableListOf<Int>()
+
+    if (listTeam_TotalScore.isNotEmpty()) {
+
+        var currentRank = 1
+        val firstTeam = listTeam_TotalScore.first()
+        var currentScore = firstTeam.second
+        var currentNumberDiff = firstTeam.first.numberDiff
+        var currentTotalGoal = firstTeam.first.totalGoal
+        var currentTotalMatch = firstTeam.first.win-firstTeam.first.lose
+
+        listTeam_TotalScore.forEachIndexed { index, pair ->
+            val team = pair.first
+            val numberDiff = team.numberDiff
+            val totalGoal = team.totalGoal
+            val totalMatch = team.win - team.lose
+            val score = pair.second
+            if (score != currentScore || numberDiff != currentNumberDiff || totalGoal != currentTotalGoal || totalMatch != currentTotalMatch) {
+                currentRank = index + 1
+                currentScore = score
+                currentNumberDiff = numberDiff
+                currentTotalGoal = totalGoal
+                currentTotalMatch = totalMatch
+            }
+            rankedTeam.add(currentRank)
+        }
+    }
 
     val currentDate by remember {
         mutableStateOf(LocalDate.now())
@@ -94,98 +124,151 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController,homeV
             }
         }
     ) { paddingValues ->
-        Column(modifier = modifier.background(BlackBackground)
-            .padding(paddingValues)
-            .fillMaxSize()) {
+        if (isLoading.value) {
             Column(
-                modifier = modifier.background(GreenBackground)
-                    .fillMaxSize()
-                    .weight(0.25f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-
-            ) {
-                Text(text = "Bảng xếp hạng", fontWeight = FontWeight.SemiBold, fontSize = 30.sp, color = Color.White,
-                    modifier = modifier.padding(3.dp))
-                Text(text = "Ngày: $formattedDate", fontWeight = FontWeight.SemiBold, fontSize = 25.sp, color = Color.White,
-                    modifier = modifier.padding(3.dp))
-
-            }
-            Card(
                 modifier = modifier
-                    .fillMaxWidth()
-                    .height(50.dp), shape = RoundedCornerShape(0.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = BlackBar
-                )
-            ) {
-                Row(modifier = modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "Hạng",
-                        fontSize = 17.sp,
-                        modifier = modifier.weight(0.15f).padding(horizontal = 3.dp),
-                        textAlign = TextAlign.Center,
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = "Đội",
-                        fontSize = 17.sp,
-                        modifier = modifier.weight(0.3f),
-                        textAlign = TextAlign.Left,
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = "Thắng",
-                        fontSize = 17.sp,
-                        modifier = modifier.weight(0.3f),
-                        textAlign = TextAlign.Center,
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = "Hòa",
-                        fontSize = 17.sp,
-                        modifier = modifier.weight(0.2f),
-                        textAlign = TextAlign.Center,
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = "Thua",
-                        fontSize = 17.sp,
-                        modifier = modifier.weight(0.2f),
-                        textAlign = TextAlign.Center,
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = "Hiệu số",
-                        fontSize = 17.sp,
-                        modifier = modifier.weight(0.2f),
-                        textAlign = TextAlign.Center,
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = "Điểm số",
-                        fontSize = 17.sp,
-                        modifier = modifier.weight(0.2f),
-                        textAlign = TextAlign.Center,
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-
+                    .background(BlackBackground)
+                    .padding(paddingValues)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center){
+                CircularProgressIndicator()
             }
+        } else {
+            Column(
+                modifier = modifier
+                    .background(BlackBackground)
+                    .padding(paddingValues)
+                    .fillMaxSize()
+            ) {
+                Column(
+                    modifier = modifier
+                        .background(GreenBackground)
+                        .fillMaxSize()
+                        .weight(0.25f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
 
-            LazyColumn(modifier = modifier
-                .fillMaxSize()
-                .weight(0.85f)
-               , verticalArrangement = Arrangement.spacedBy(0.dp)) {
-                items(listTeam_TotalScore.size){ index ->
-                    TeamCard(team = listTeam_TotalScore[index].first, rank = index+1, score = listTeam_TotalScore[index].second)
+                    ) {
+                    Text(
+                        text = "Bảng xếp hạng",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 30.sp,
+                        color = Color.White,
+                        modifier = modifier.padding(3.dp)
+                    )
+                    Text(
+                        text = "Ngày: $formattedDate",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 25.sp,
+                        color = Color.White,
+                        modifier = modifier.padding(3.dp)
+                    )
+
+                }
+                Card(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .height(50.dp), shape = RoundedCornerShape(0.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = BlackBar
+                    )
+                ) {
+                    Row(
+                        modifier = modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Hạng",
+                            fontSize = 17.sp,
+                            modifier = modifier
+                                .weight(0.15f)
+                                .padding(horizontal = 3.dp),
+                            textAlign = TextAlign.Center,
+                            color = Color.White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = "Đội",
+                            fontSize = 17.sp,
+                            modifier = modifier.weight(0.3f),
+                            textAlign = TextAlign.Left,
+                            color = Color.White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = "Thắng",
+                            fontSize = 17.sp,
+                            modifier = modifier.weight(0.3f),
+                            textAlign = TextAlign.Center,
+                            color = Color.White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = "Hòa",
+                            fontSize = 17.sp,
+                            modifier = modifier.weight(0.2f),
+                            textAlign = TextAlign.Center,
+                            color = Color.White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = "Thua",
+                            fontSize = 17.sp,
+                            modifier = modifier.weight(0.2f),
+                            textAlign = TextAlign.Center,
+                            color = Color.White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = "Hiệu số",
+                            fontSize = 17.sp,
+                            modifier = modifier.weight(0.2f),
+                            textAlign = TextAlign.Center,
+                            color = Color.White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = "Điểm số",
+                            fontSize = 17.sp,
+                            modifier = modifier.weight(0.2f),
+                            textAlign = TextAlign.Center,
+                            color = Color.White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+
+                }
+                if (listTeams.isEmpty()){
+                    Column(
+                        modifier = modifier.fillMaxSize().weight(0.85f),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            modifier = modifier.fillMaxWidth(),
+                            text = "Ooops! No Data",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 30.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                } else {
+
+                    LazyColumn(
+                        modifier = modifier
+                            .fillMaxSize()
+                            .weight(0.85f), verticalArrangement = Arrangement.spacedBy(0.dp)
+                    ) {
+
+                        items(listTeam_TotalScore.size) { index ->
+                            TeamCard(
+                                team = listTeam_TotalScore[index].first, rank = rankedTeam[index],
+                                score = listTeam_TotalScore[index].second
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -210,7 +293,9 @@ fun TeamCard(modifier: Modifier = Modifier, team: Team?, rank: Int, score: Int =
                 Text(
                     text = "$rank",
                     fontSize = 17.sp,
-                    modifier = modifier.weight(0.15f).padding(horizontal = 3.dp),
+                    modifier = modifier
+                        .weight(0.15f)
+                        .padding(horizontal = 3.dp),
                     textAlign = TextAlign.Center,
                     color = Color.White,
                     fontWeight = FontWeight.W600

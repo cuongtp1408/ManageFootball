@@ -256,7 +256,7 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                                     fontWeight = FontWeight.Normal
                                 )
                                 Text(
-                                    text = "Độ tuổi tối thiểu phải lớn hơn 1",
+                                    text = "Độ tuổi tối thiểu phải lớn hơn 0",
                                     modifier = Modifier.padding(bottom = 10.dp,  end = 10.dp),
                                     fontStyle = FontStyle.Italic,
                                     fontSize = 15.sp,
@@ -326,7 +326,7 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                                     fontWeight = FontWeight.Normal
                                 )
                                 Text(
-                                    text = "Số lượng cầu thủ tối thiểu phải lớn hơn 1",
+                                    text = "Số lượng cầu thủ tối thiểu phải lớn hơn 0",
                                     modifier = Modifier.padding(bottom = 10.dp,  end = 10.dp),
                                     fontStyle = FontStyle.Italic,
                                     fontSize = 15.sp,
@@ -753,7 +753,7 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                text = "Tổng số trận đối kháng",
+                                text = "Đối kháng",
                                 fontSize = 20.sp,
                                 modifier = modifier
                                     .fillMaxSize()
@@ -803,6 +803,8 @@ fun SettingScreen(modifier: Modifier = Modifier, navController: NavController, s
                                 Toast.makeText(context, "Thay đổi thành công", Toast.LENGTH_SHORT).show()
                                 keyboard?.hide()
                                 navController.navigate(MainScreen.HomeScreen.route)
+                            } else {
+                                Toast.makeText(context,"Vi phạm quy định! Vui lòng xem lại và điều chỉnh các quy định sao cho thích hợp!", Toast.LENGTH_LONG).show()
                             }
                         },
                             shape = RoundedCornerShape(24.dp),

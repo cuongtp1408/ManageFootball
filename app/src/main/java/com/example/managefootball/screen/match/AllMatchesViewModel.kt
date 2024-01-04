@@ -10,9 +10,11 @@ import com.example.managefootball.model.Match
 import com.example.managefootball.model.MatchTeams
 import com.example.managefootball.model.Team
 import com.example.managefootball.repository.FootballRepository
+import com.example.managefootball.util.convertStringToDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,7 +37,11 @@ class AllMatchesViewModel @Inject constructor(
 
     private fun getAllMatches(){
         viewModelScope.launch {
-            footballRepository.getAllMatches().collect{
+            footballRepository.getAllMatches().map { matches ->
+                matches.sortedByDescending { match ->
+                    convertStringToDate(match.day)
+                }
+            }.collect{
                 _listMatches.value = it
             }
 

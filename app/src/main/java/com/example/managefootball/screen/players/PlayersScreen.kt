@@ -75,9 +75,17 @@ fun PlayersScreen(modifier : Modifier = Modifier, navController: NavController, 
         modifier = modifier.fillMaxSize(),
         bottomBar = { BottomBar(navController = navController)}
     ) { paddingValues ->
-//        if (isLoading){
-//            CircularProgressIndicator()
-//        } else {
+        if (isLoading) {
+            Column(
+                modifier = modifier
+                    .background(BlackBackground)
+                    .padding(paddingValues)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center){
+                CircularProgressIndicator()
+            }
+        } else {
             Column(
                 modifier = modifier
                     .background(BlackBackground)
@@ -192,7 +200,7 @@ fun PlayersScreen(modifier : Modifier = Modifier, navController: NavController, 
             }
         }
 
-    //}
+    }
 }
 
 @Composable

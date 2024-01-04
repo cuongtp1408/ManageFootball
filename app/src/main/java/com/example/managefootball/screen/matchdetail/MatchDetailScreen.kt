@@ -79,8 +79,15 @@ fun MatchDetailScreen(modifier: Modifier = Modifier,navController: NavController
             navController.popBackStack()
         }}
     ) { paddingValues ->
-        if (isLoading){
-            CircularProgressIndicator()
+        if (isLoading) {
+            Column(
+                modifier = modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center){
+                CircularProgressIndicator()
+            }
         } else {
             Column(
                 modifier = modifier

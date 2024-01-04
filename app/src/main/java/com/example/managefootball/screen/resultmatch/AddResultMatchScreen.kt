@@ -557,7 +557,7 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                                 )
                             )
 
-                            Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Ghi kết quả thành công", Toast.LENGTH_SHORT).show()
                             navController.navigate(MainScreen.HomeScreen.route)
                         }
                     } else {
@@ -665,7 +665,7 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                                 )
                             )
 
-                            Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Ghi kết quả thành công", Toast.LENGTH_SHORT).show()
                             navController.navigate(MainScreen.HomeScreen.route)
 
                         }

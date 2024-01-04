@@ -93,8 +93,16 @@ fun AllMatchesScreen(modifier: Modifier = Modifier,navController: NavController,
         }
     ) { paddingValues ->
         if (isLoading.value) {
-            CircularProgressIndicator()
-        } else{
+            Column(
+                modifier = modifier
+                    .background(BlackBackground)
+                    .padding(paddingValues)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center){
+                CircularProgressIndicator()
+            }
+        } else {
         Column(modifier = modifier
             .background(BlackBackground)
             .padding(paddingValues)
@@ -111,25 +119,48 @@ fun AllMatchesScreen(modifier: Modifier = Modifier,navController: NavController,
                 Text(text = "Lịch thi đấu", fontWeight = FontWeight.SemiBold, fontSize = 30.sp, color = Color.White,
                     modifier = modifier.padding(3.dp))
             }
+            if (listMatches.isEmpty()){
+                Column(
+                    modifier = modifier.fillMaxSize().weight(0.85f),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        modifier = modifier.fillMaxWidth(),
+                        text = "Ooops! No Data",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 30.sp,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            } else {
 
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxSize().weight(0.85f)
-                    .padding(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
+                LazyColumn(
+                    modifier = modifier
+                        .fillMaxSize().weight(0.85f)
+                        .padding(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
                     items(listMatchTeams.size) { index ->
-                    val isDone = convertStringToDate(listMatches[index].day) <= convertStringToDate(currentDate)
+                        val isDone =
+                            convertStringToDate(listMatches[index].day) <= convertStringToDate(
+                                currentDate
+                            )
                         MatchCard(
                             match = listMatches[index],
                             team1 = listMatchTeams[index].team1,
                             team2 = listMatchTeams[index].team2,
                             isDone = isDone
-                        ){ done ->
+                        ) { done ->
                             if (listMatches[index].status == STATUS_DONE) {
                                 navController.navigate(NavScreen.MatchDetailScreen.route + "/${listMatches[index].idMatch}")
                             } else if (listMatches[index].status == STATUS_PROGRESS && !done) {
-                                Toast.makeText(context, "Chưa đến ngày diễn ra trận đấu", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Chưa đến ngày diễn ra trận đấu",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             } else {
                                 navController.navigate(NavScreen.AddResultMatchScreen.route + "/${listMatches[index].idMatch}")
                             }
@@ -137,6 +168,7 @@ fun AllMatchesScreen(modifier: Modifier = Modifier,navController: NavController,
                     }
 
                 }
+            }
             }
         }
     }

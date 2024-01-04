@@ -1,5 +1,6 @@
 package com.example.managefootball.screen.home
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.managefootball.model.Team
@@ -41,7 +42,10 @@ class HomeViewModel @Inject constructor(
     private val _loseScore = MutableStateFlow(0)
     val loseScore = _loseScore.asStateFlow()
 
+    var isLoading = mutableStateOf(true)
+
     init {
+        isLoading.value = true
         getListTeams()
         getPriorityNumberDifferent()
         getPriorityTotalGoal()
@@ -50,6 +54,7 @@ class HomeViewModel @Inject constructor(
         getWinScore()
         getTieScore()
         getLoseScore()
+        isLoading.value = false
     }
 
     private fun getListTeams(){
