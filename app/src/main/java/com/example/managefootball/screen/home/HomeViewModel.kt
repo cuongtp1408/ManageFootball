@@ -54,70 +54,93 @@ class HomeViewModel @Inject constructor(
         getWinScore()
         getTieScore()
         getLoseScore()
-        isLoading.value = false
+
     }
 
     private fun getListTeams(){
         viewModelScope.launch {
+            isLoading.value = true
             footballRepository.getAllTeams().collect{
                 _listTeams.value = it
             }
+            isLoading.value = false
         }
     }
 
     private fun getPriorityTotalScore(){
         viewModelScope.launch {
+            isLoading.value = true
             ruleRepository.getPriorityTotalScore.collect{
                 _priorityTotalScore.value = it
+                isLoading.value = false
             }
+
         }
     }
 
     private fun getPriorityNumberDifferent(){
         viewModelScope.launch {
+            isLoading.value = true
             ruleRepository.getPriorityNumberDifferent.collect{
                 _priorityNumberDifferent.value = it
+                isLoading.value = false
             }
+
         }
     }
 
     private fun getPriorityTotalGoal(){
         viewModelScope.launch {
+            isLoading.value = true
             ruleRepository.getPriorityTotalGoal.collect{
                 _priorityTotalGoal.value = it
+                isLoading.value = false
             }
+
         }
     }
 
     private fun getPriorityTotalMatch(){
         viewModelScope.launch {
+            isLoading.value = true
             ruleRepository.getPriorityTotalMatch.collect{
                 _priorityTotalMatch.value = it
+                isLoading.value = false
             }
+
         }
     }
 
     private fun getWinScore(){
         viewModelScope.launch {
+            isLoading.value = true
             ruleRepository.getWinScore.collect{
                 _winScore.value = it
+                isLoading.value = false
             }
+
         }
     }
 
     private fun getTieScore(){
         viewModelScope.launch {
+            isLoading.value = true
             ruleRepository.getTieScore.collect{
                 _tieScore.value = it
+                isLoading.value = false
             }
+
         }
     }
 
     private fun getLoseScore(){
         viewModelScope.launch {
+            isLoading.value = true
             ruleRepository.getLoseScore.collect{
                 _loseScore.value = it
+                isLoading.value = false
             }
+
         }
     }
 }

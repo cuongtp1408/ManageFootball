@@ -75,17 +75,7 @@ fun PlayersScreen(modifier : Modifier = Modifier, navController: NavController, 
         modifier = modifier.fillMaxSize(),
         bottomBar = { BottomBar(navController = navController)}
     ) { paddingValues ->
-//        if (isLoading) {
-//            Column(
-//                modifier = modifier
-//                    .background(BlackBackground)
-//                    .padding(paddingValues)
-//                    .fillMaxSize(),
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                verticalArrangement = Arrangement.Center){
-//                CircularProgressIndicator()
-//            }
-//        } else {
+
             Column(
                 modifier = modifier
                     .background(BlackBackground)
@@ -170,34 +160,50 @@ fun PlayersScreen(modifier : Modifier = Modifier, navController: NavController, 
                     }
                 }
 
-                if (listPlayersWithTeams.isEmpty()) {
-                    Column(
-                        modifier = modifier.fillMaxSize().weight(0.85f),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            modifier = modifier.fillMaxWidth(),
-                            text = "Ooops! No Data",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 30.sp,
-                            color = Color.White,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                } else {
-                    LazyColumn(modifier = modifier
-                        .fillMaxSize()
-                        .weight(0.85f),
-                        verticalArrangement = Arrangement.spacedBy(0.dp)
-                    ) {
-                        items(listPlayersWithTeams.size) { index ->
-                            PlayerCard( stt = index + 1,player = listPlayersWithTeams[index])
+                        if (isLoading) {
+            Column(
+                modifier = modifier
+                    .background(BlackBackground)
+
+                    .fillMaxSize().weight(0.85f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center){
+                CircularProgressIndicator()
+            }
+        } else {
+
+                            if (listPlayersWithTeams.isEmpty()) {
+                                Column(
+                                    modifier = modifier.fillMaxSize().weight(0.85f),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        modifier = modifier.fillMaxWidth(),
+                                        text = "Ooops! No Data",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 30.sp,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center,
+                                    )
+                                }
+                            } else {
+                                LazyColumn(
+                                    modifier = modifier
+                                        .fillMaxSize()
+                                        .weight(0.85f),
+                                    verticalArrangement = Arrangement.spacedBy(0.dp)
+                                ) {
+                                    items(listPlayersWithTeams.size) { index ->
+                                        PlayerCard(
+                                            stt = index + 1,
+                                            player = listPlayersWithTeams[index]
+                                        )
+                                    }
+                                }
+                            }
+
                         }
-                    }
-                }
-
-
         }
 
     }
