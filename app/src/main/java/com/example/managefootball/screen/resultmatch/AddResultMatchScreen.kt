@@ -153,7 +153,7 @@ fun AddResultMatchScreen(navController: NavController, modifier: Modifier = Modi
                         modifier = modifier
                             .fillMaxSize()
                             .padding(5.dp)
-                            .height(150.dp),
+                            .height(170.dp),
                         colors = CardDefaults.cardColors(containerColor = WhiteBackground)
                     ) {
                         Column(

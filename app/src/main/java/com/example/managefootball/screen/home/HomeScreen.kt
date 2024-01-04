@@ -43,6 +43,7 @@ import com.example.managefootball.screen.matchdetail.ScoreCard
 import com.example.managefootball.ui.theme.BlackBackground
 import com.example.managefootball.ui.theme.BlackBar
 import com.example.managefootball.ui.theme.BlueCard
+import com.example.managefootball.ui.theme.BluePoint
 import com.example.managefootball.ui.theme.ErrorColor
 import com.example.managefootball.ui.theme.GrayBackground
 import com.example.managefootball.ui.theme.Green
@@ -337,8 +338,8 @@ fun TeamCard(modifier: Modifier = Modifier, team: Team?, rank: Int, score: Int =
                     fontSize = 17.sp,
                     modifier = modifier.weight(0.2f),
                     textAlign = TextAlign.Center,
-                    color = if (team.numberDiff>=0) BlueCard else ErrorColor,
-                    fontWeight = FontWeight.W600
+                    color = if (team.numberDiff>=0) BluePoint else ErrorColor,
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = score.toString(),

@@ -99,7 +99,7 @@ fun MatchDetailScreen(modifier: Modifier = Modifier,navController: NavController
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(5.dp)
-                        .height(150.dp),
+                        .height(170.dp),
                     colors = CardDefaults.cardColors(containerColor = WhiteBackground)
                 ) {
                     Column(

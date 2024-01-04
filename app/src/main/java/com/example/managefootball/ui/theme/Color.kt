@@ -19,6 +19,7 @@ val ErrorColor = Color(0xFFA85151)
 val Yellow = Color(0xFFCE9F30)
 val Green = Color(0xFF53B175)
 val BlueCard = Color(0xFF438CE6)
+val BluePoint = Color(0xFF0373FD)
 
 val GreenBackground = Color(0xFF6CCC65)
 val BlackBar = Color(0xFF535554)

@@ -178,7 +178,7 @@ fun AllMatchesScreen(modifier: Modifier = Modifier,navController: NavController,
 fun MatchCard(modifier: Modifier = Modifier, match: Match, team1: Team, team2: Team, isDone: Boolean, onClick:(Boolean) -> Unit = {}){
     Card(modifier = modifier
         .fillMaxWidth()
-        .height(60.dp)
+        .height(65.dp)
         .clickable {
             onClick(isDone)
         }, shape = RoundedCornerShape(10.dp),
